@@ -104,9 +104,11 @@ function Circle(x, y, dx, dy, radius) {
         this.y += this.dy;
 
         // interactivity
-        if (mouse.x - this.x < 50) {
+        if (mouse.x - this.x < 50 && mouse.x - this.x > -50
+            && mouse.y - this.y < 50  &&  mouse.y - this.y > -50) {
             this.radius += 1;
         }
+
 
         this.draw();
     }
@@ -139,12 +141,6 @@ function animate() {
         circleArray[i].update();
     }
 
-
-
-
-    if (y + radius/2 > innerHeight) {
-        cancelAnimationFrame(animationId);
-    }
 
 }
 
