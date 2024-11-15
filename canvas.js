@@ -5,72 +5,17 @@ canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
 
-// // Recs
-// c.fillStyle = 'rgba(255, 0, 0, 0.5)';
-// c.fillRect(100, 100, 100, 100);
-// c.fillStyle = 'rgba(255, 200, 0, 0.5)';
-// c.fillRect(300, 100, 100, 100);
-// c.fillStyle = 'rgba(0, 0, 255, 0.5)';
-// c.fillRect(100, 300, 100, 100);
-// c.fillStyle = 'rgba(300, 200, 100, 255)';
-// c.fillRect(500, 100, 100, 100);
 
-
-// console.log(canvas);
-
-
-// // Line
-// c.beginPath();
-// c.moveTo(300, 300);
-// c.lineTo(500, 200);
-// c.lineTo(600, 500);
-// c.strokeStyle = "gray";
-// c.stroke();
-
-// // Arc / Circle
-// c.beginPath();
-// c.arc(300, 400, 30, 0, Math.PI * 2, false);
-// c.strokeStyle = 'blue';
-// c.stroke();
-
-
-// // Arc / Circle
-// for (var i = 300; i < 500; i += 50) {
-//     for (var j = 300; j < 500; j += 50) {
-//         c.beginPath();
-//         c.arc(i, j, 30, 0, Math.PI * 2, false);
-//         c.strokeStyle = 'blue';
-//         c.stroke();
-//     }
-// }
-
-
-// // random circles
-// for (var i = 0; i < 30; i++) {
-//     var x = Math.random() * window.innerWidth;
-//     var y = Math.random() * window.innerHeight;
-
-//     c.beginPath();
-//     c.arc(x, y, 30, 0, Math.PI * 2, false);
-//     c.strokeStyle = 'green';
-//     c.stroke();
-// }
-
-
-// c.beginPath();
-// c.arc(300, 300, 35, 0, Math.PI * 2, false);
-// c.strokeStyle = 'blue';
-// c.stroke();
-
+// Create mouse struct that will hold x and y
 var mouse = {
     x: undefined,
     y: undefined
 }
 
+// Max circle radius
 var maxRadius = 44;
-var minRadius = 3;
 
-
+// Array that holds all color values
 var colorArray = [
     '#3F3F37',
     '#D6D6B1',
@@ -79,12 +24,21 @@ var colorArray = [
     '#DE541E'    
 ];
 
-
+// Event listener that gets mouse x,y position
 window.addEventListener('mousemove', 
     function(event) {
         mouse.x = event.x;
         mouse.y = event.y;
 })
+
+
+// Event listener that adjusts canvas width based on resized window
+window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    init();
+});
 
 
 // Circle object
@@ -94,6 +48,7 @@ function Circle(x, y, dx, dy, radius) {
     this.dx = dx;
     this.dy = dy;
     this.radius = radius;
+    this.minRadius = radius;
 
     var color = colorArray[Math.floor(Math.random() * colorArray.length)];
 
@@ -131,7 +86,7 @@ function Circle(x, y, dx, dy, radius) {
                 this.radius += 1;   
             }
 
-        } else if (this.radius > minRadius) {
+        } else if (this.radius > this.minRadius) {
             this.radius -= 1;
         }
 
@@ -144,20 +99,25 @@ function Circle(x, y, dx, dy, radius) {
 // Create a circle array that holds all circle objects
 var circleArray = [];
 
-// Create 120 circles with random variables and push to array
-for (var i = 0; i < 120; i++) {
+// Initiation function. Gets called at the start of the program and when resizing window.
+function init() {
 
-    var radius = Math.random() * 5 + 1;
+    circleArray = [];
 
-    var x = Math.random() * (window.innerWidth - radius * 2) + radius;
-    var y = Math.random() * (window.innerHeight - radius * 2) + radius;
+    // Create circles with random variables and push to array
+    for (var i = 0; i < 500; i++) {
 
-    var dx = (Math.random() - 0.5) * 2;
-    var dy = (Math.random() - 0.5 )* 4;
+        var radius = Math.random() * 4 + 1;
 
-    circleArray.push(new Circle(x, y, dx, dy, radius));
+        var x = Math.random() * (window.innerWidth - radius * 2) + radius;
+        var y = Math.random() * (window.innerHeight - radius * 2) + radius;
+
+        var dx = (Math.random() - 0.5) * 1.5;
+        var dy = (Math.random() - 0.5 )* 2;
+
+        circleArray.push(new Circle(x, y, dx, dy, radius));
+    }
 }
-
 
 // Animation loop
 function animate() {
@@ -169,4 +129,5 @@ function animate() {
     }
 }
 
+init();
 animate();
