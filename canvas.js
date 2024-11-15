@@ -76,7 +76,7 @@ var colorArray = [
     '#D6D6B1',
     '#494331',
     '#878472',
-    '#DE541E',    
+    '#DE541E'    
 ];
 
 
@@ -87,6 +87,7 @@ window.addEventListener('mousemove',
 })
 
 
+// Circle object
 function Circle(x, y, dx, dy, radius) {
     this.x = x;
     this.y = y;
@@ -94,27 +95,35 @@ function Circle(x, y, dx, dy, radius) {
     this.dy = dy;
     this.radius = radius;
 
+    var color = colorArray[Math.floor(Math.random() * colorArray.length)];
+
+    // Draw circle onto canvas
     this.draw = function() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+        c.fillStyle = color;
         c.fill();
-        c.stroke();
     }
 
+    // Updates position. Change direction if collision with boundaries.
     this.update = function() {
+
+        // if x axis collisions
         if ((this.x + this.radius > innerWidth) || (this.x - this.radius < 0)) {
             this.dx = -this.dx;
         }
         
     
+        // if y axis collisions
         if ((this.y + this.radius > innerHeight) || (this.y - this.radius < 0)) {
             this.dy = -this.dy;
         }
 
+        // Increment position
         this.x += this.dx;
         this.y += this.dy;
 
-        // interactivity
+        // Mouse interaction. If within 50 of mouse position, increase size.
         if (mouse.x - this.x < 50 && mouse.x - this.x > -50
             && mouse.y - this.y < 50  &&  mouse.y - this.y > -50) {
 
@@ -126,18 +135,19 @@ function Circle(x, y, dx, dy, radius) {
             this.radius -= 1;
         }
 
-
+        // Draw on canvas
         this.draw();
     }
 }
 
 
-
+// Create a circle array that holds all circle objects
 var circleArray = [];
 
+// Create 120 circles with random variables and push to array
 for (var i = 0; i < 120; i++) {
 
-    var radius = 30
+    var radius = Math.random() * 5 + 1;
 
     var x = Math.random() * (window.innerWidth - radius * 2) + radius;
     var y = Math.random() * (window.innerHeight - radius * 2) + radius;
@@ -149,7 +159,7 @@ for (var i = 0; i < 120; i++) {
 }
 
 
-
+// Animation loop
 function animate() {
     animationId = requestAnimationFrame(animate);
     c.clearRect(0, 0, innerWidth, innerHeight);
@@ -157,8 +167,6 @@ function animate() {
     for (var i = 0; i < circleArray.length; i++) {
         circleArray[i].update();
     }
-
-
 }
 
 animate();
